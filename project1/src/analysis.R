@@ -71,11 +71,15 @@ df$nl %>%
 { tibble(null_hypothesis = "level", pval = .[["p.value"]]) } %>%
   kable(caption = "KPSS unit root test")
 
+df$nl %>% adf.test()
+
 df$nl %>%
   diff() %>%
   pp.test() %>%
 { tibble(alt_hypothesis = .[["alternative"]], pval = .[["p.value"]]) } %>%
   kable(caption = "Phillips-Peron unit root test for first differences")
+
+df$nl %>% diff() %>% adf.test()
 
 ### ARMA and ARIMA models, IRF
 
