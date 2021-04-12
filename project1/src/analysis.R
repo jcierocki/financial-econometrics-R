@@ -91,7 +91,7 @@ arma1 <- df$nl %>% auto.arima(
 
 sumup_arima(arma1) %>% kable(digits = 4)
 
-arma1 %>% calc_irf() %>% plot()
+arma1 %>% calc_irf() %>% autoplot() + ggtitle("IRF for the ARMA(0,5) model")
 ggsave("project1/output/arma_irf.png")
 
 arima1 <- df$nl %>% auto.arima(
@@ -107,7 +107,7 @@ arima1 <- df$nl %>% auto.arima(
 
 sumup_arima(arima1) %>% kable(digits = 4)
 
-arima1 %>% calc_irf() %>% plot()
+arima1 %>% calc_irf() %>% autoplot() + ggtitle("IRF for the ARIMA(1,1,0) model")
 ggsave("project1/output/arima_irf.png")
 
 ## VAR models
@@ -142,10 +142,10 @@ srim[,,1]
 
 ### irf
 
-irf(svar1, n.ahead=N, cum = F, boot = F) %>% plot()
+irf(svar1, n.ahead=N, cum = F, boot = F) %>% plot(main = "short-run restrictions IRF for VAR(9) model")
 ggsave("project1/output/var_irf_cholesky.png")
 
-irf(svar2, n.ahead=N, cum = F, boot = F) %>% plot()
+irf(svar2, n.ahead=N, cum = F, boot = F) %>% plot(main = "Blanchard-Quah restrictions IRF for VAR(9) model")
 ggsave("project1/output/var_irf_bq.png")
 
 ### fevd

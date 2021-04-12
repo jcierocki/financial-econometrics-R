@@ -15,7 +15,7 @@ calc_irf <- function(arima_model) {
   ) %>% `class<-`("irf")
 }
 
-plot.irf <- function(irf) {
+autoplot.irf <- function(irf) {
   n <- length(irf)
 
   tibble(lag = 1L:n, coef = as.numeric(irf)) %>%
