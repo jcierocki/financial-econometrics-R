@@ -1,2 +1,3 @@
 *.nb.html linguist-documentation
+*.md linguist-documentation
 *.csv linguist-vendored
