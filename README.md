@@ -21,7 +21,16 @@ In this report we're going to:
 
 ![ts plot](https://github.com/jcierocki/financial-econometrics-R/blob/main/project1/output/ts.png)
 
+#### Autocorrelation plots
+
+![ts plot](https://github.com/jcierocki/financial-econometrics-R/blob/main/project1/output/acf.png)
+
+![ts plot](https://github.com/jcierocki/financial-econometrics-R/blob/main/project1/output/pacf.png)
+
 #### Tests for stationarity
 
 We're going to pursue *Phillips-Perron* and *KPSS* tests. *Dickey-Fuler* test would be omitted as the PP test
 is its extension.
+
+On raw series we've obtained:
+- *p-value* = 

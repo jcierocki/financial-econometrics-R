@@ -51,15 +51,31 @@ df %>%
   scale_color_manual(name = "emitent", values = c("#F8766D", "#00BFC4"), labels = c("The Netherlands", "EU")) +
   theme(plot.title = element_text(hjust = 0.5))
 
-ggsave("project1/output/ts.png")
+# ggsave("project1/output/ts.png")
 
-df %>%
-  as_tsibble(index = date) %>%
-  fill_gaps() %>%
-  feasts::ACF(nl, lag_max = 10) %>%
-  autoplot()
+corrplot_df <- df %>%
+  mutate(., fake_date = date[1] + days(0:(nrow(.) - 1L))) %>%
+  as_tsibble(index = fake_date)
+
+corrplot_df %>%
+  feasts::ACF(nl, lag_max = 100) %>%
+  autoplot() +
+  scale_x_continuous(breaks = seq(0, 100, by = 10)) +
+  labs(y = NULL, title = "ACF plot") +
+  theme(plot.title = element_text(hjust = 0.5))
 
 ggsave("project1/output/acf.png")
+
+corrplot_df %>%
+  feasts::PACF(nl, lag_max = 10) %>%
+  autoplot() +
+  scale_x_continuous(breaks = 1:10) +
+  labs(y = NULL, title = "PACF plot") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave("project1/output/pacf.png")
+
+###
 
 df$nl %>%
   pp.test() %>%
