@@ -55,7 +55,7 @@ The results suggest that the process is actually integrated at level 1, and the 
 
 ![ts plot](https://github.com/jcierocki/financial-econometrics-R/blob/main/project1/output/acf_diff.png)
 
-![ts plot](https://github.com/jcierocki/financial-econometrics-R/blob/main/project1/output/acf_diff.png)
+![ts plot](https://github.com/jcierocki/financial-econometrics-R/blob/main/project1/output/pacf_diff.png)
 
 ACF for the first differences looks pretty random, with the majority of the lags not being significantly correlated. A partial 
 autocorrelation is significant for levels 1 and 7, and because of that we will set the maximum AR lag at 7 while calibrating the model.
