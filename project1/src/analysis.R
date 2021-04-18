@@ -54,7 +54,11 @@ df %>%
 # ggsave("project1/output/ts.png")
 
 corrplot_df <- df %>%
-  mutate(., fake_date = date[1] + days(0:(nrow(.) - 1L))) %>%
+  mutate(
+    .,
+    fake_date = date[1] + days(0:(nrow(.) - 1L)),
+    nl_diff = c(NA, diff(nl))
+  ) %>%
   as_tsibble(index = fake_date)
 
 corrplot_df %>%
@@ -75,38 +79,43 @@ corrplot_df %>%
 
 ggsave("project1/output/pacf.png")
 
+corrplot_df %>%
+  feasts::ACF(nl_diff, lag_max = 100) %>%
+  autoplot() +
+  scale_x_continuous(breaks = seq(0, 100, by = 10)) +
+  labs(y = NULL, title = "first differences ACF plot") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave("project1/output/acf_diff.png")
+
+corrplot_df %>%
+  feasts::PACF(nl_diff, lag_max = 10) %>%
+  autoplot() +
+  scale_x_continuous(breaks = 1:10) +
+  labs(y = NULL, title = "first differences PACF plot") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave("project1/output/pacf_diff.png")
+
 ###
 
-df$nl %>%
-  pp.test() %>%
-{ tibble(alt_hypothesis = .[["alternative"]], pval = .[["p.value"]]) } %>%
-  kable(caption = "Phillips-Peron unit root test")
+df$nl %>% pp.test()
 
-df$nl %>%
-  kpss.test(null = "Level") %>%
-{ tibble(null_hypothesis = "level", pval = .[["p.value"]]) } %>%
-  kable(caption = "KPSS unit root test")
+df$nl %>% kpss.test(null = "Level")
 
 df$nl %>% adf.test()
 
-df$nl %>%
-  diff() %>%
-  pp.test() %>%
-{ tibble(alt_hypothesis = .[["alternative"]], pval = .[["p.value"]]) } %>%
-  kable(caption = "Phillips-Peron unit root test for first differences")
+df$nl %>% diff() %>% pp.test()
+
+df$nl %>% diff() %>% kpss.test(null = "Level")
 
 df$nl %>% diff() %>% adf.test()
 
 ### ARMA and ARIMA models, IRF
 
-arma1 <- df$nl %>% auto.arima(
-  d = 0L,
-  seasonal = F,
-  stepwise = F,
-  trace = F,
-  test = "pp",
-  parallel = T,
-  num.cores = 7,
+arma1 <- df$nl %>% Arima(
+  order = c(1L, 0L, 0L),
+  optim.method = "Nelder-Mead"
 )
 
 sumup_arima(arma1) %>% kable(digits = 4)
@@ -116,14 +125,18 @@ ggsave("project1/output/arma_irf.png")
 
 arima1 <- df$nl %>% auto.arima(
   d = 1L,
+  start.p = 7L,
+  start.q = 0L,
+  max.p = 7L,
+  max.q = 2L,
   seasonal = F,
-  stepwise = F,
-  trace = F,
-  test = "pp",
+  stepwise = T,
+  trace = T,
   allowdrift = F,
-  parallel = T,
-  num.cores = 7,
+  approximation = F
 )
+
+arima2 <- df$nl %>% Arima(order = c(1L, 1L, 1L), optim.method = "Nelder-Mead")
 
 sumup_arima(arima1) %>% kable(digits = 4)
 

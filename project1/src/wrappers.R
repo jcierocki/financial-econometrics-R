@@ -100,9 +100,9 @@ sumup_arima <- function(arima) {
   model_coefs <- invisible(lmtest::coeftest(arima))
 
   model_name <- "ARIMA(%i, %i, %i)" %>% sprintf(
-    length(arima$model$phi),
+    arima$arma[1],
     ifelse(length(arima$model$Delta) > 0, arima$model$Delta, 0),
-    length(arima$model$theta)
+    arima$arma[2]
   )
 
   if (!is.na(arima$coef["intercept"]) && length(arima$model$Delta) > 0) {
@@ -115,11 +115,11 @@ sumup_arima <- function(arima) {
     as_tibble() %>%
     select(1,4) %>%
     `colnames<-`(c("estimate", "p-value")) %>%
-    mutate(`współczynnik` = coef_names, .before = 1)
+    mutate(coefficient = coef_names, .before = 1)
 
-  metric_table = tibble(
+  metric_table <- tibble(
     miara = c("loglik", "aic", "aicc", "bic", "rmse", "mase"),
-    `wartość` = c(arima$loglik, arima$aic, arima$aicc, arima$bic, model_summary[2], model_summary[6])
+    value = c(arima$loglik, arima$aic, arima$aicc, arima$bic, model_summary[2], model_summary[6])
   )
 
   list(
