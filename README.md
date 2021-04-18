@@ -64,5 +64,6 @@ autocorrelation is significant for levels 1 and 7, and because of that we will s
 
 We're now going to calibrate and estimate ARIMA model using the iterative algorithm proposed by *Rob Hyndman (2008)*. We 
 will disable the drift, set the order of differentiation (*d*) at 1, and the initial *p* and *q* values at 7 and 0, as we 
-expect that the ARIMA(7,1,0) would best fits the data.
+expect that the ARIMA(7,1,0) would best fits the data. The dataset is enough large (3908 observations), so we will use AIC 
+information criteria instead of AICc.
 

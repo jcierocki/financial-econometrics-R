@@ -133,10 +133,11 @@ arima1 <- df$nl %>% auto.arima(
   stepwise = T,
   trace = T,
   allowdrift = F,
-  approximation = F
+  approximation = F,
+  ic = "aic"
 )
 
-arima2 <- df$nl %>% Arima(order = c(1L, 1L, 1L), optim.method = "Nelder-Mead")
+# arima2 <- df$nl %>% Arima(order = c(1L, 1L, 1L), optim.method = "Nelder-Mead")
 
 sumup_arima(arima1) %>% kable(digits = 4)
 
