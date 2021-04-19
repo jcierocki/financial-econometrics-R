@@ -67,3 +67,52 @@ will disable the drift, set the order of differentiation (*d*) at 1, and the ini
 expect that the ARIMA(7,1,0) would best fits the data. The dataset is enough large (3908 observations), so we will use AIC 
 information criteria instead of AICc.
 
+| p,d,q |         aic|
+|:------|-----------:|
+| 7,1,0 |   -13888.93|
+| 7,1,1 |   -13886.92|
+| 0,1,1 |   -13886.66|
+| 1,1,0 |   -13886.51|
+| 6,1,1 |   -13881.67|
+| 0,1,0 |   -13881.29|
+
+The results met our expectations when it comes to the best model - ARIMA(7,1,0). Unfortunately the differences between the 
+ARIMA(0,1,0), equivalent to random walk, and the other models are very insignificant.
+
+Obtained ARIMA(7,1,0) model has the following specification:
+
+|coefficient | estimate| p-value|
+|:-----------|--------:|-------:|
+|ar1         |   0.0445|  0.0054|
+|ar2         |  -0.0124|  0.4398|
+|ar3         |  -0.0158|  0.3241|
+|ar4         |   0.0147|  0.3594|
+|ar5         |  -0.0216|  0.1778|
+|ar6         |   0.0112|  0.4844|
+|ar7         |  -0.0509|  0.0015|
+
+and measures:
+
+|measure|       value|
+|:------|-----------:|
+|LogLik |   6952.4671|
+|AIC    | -13888.9342|
+|BIC    | -13838.7700|
+|RMSE   |      0.0408|
+
+Its IRF looks like:
+
+![ts plot](https://github.com/jcierocki/financial-econometrics-R/blob/main/project1/output/arima_irf.png)
+
+showing that the impulse expires in approximately 3 weeks (15 business days) with the higher variance along first 8 days.
+
+In the further analysis we're going to compare the following ARIMA models:
+- 7,1,0
+- 1,1,0
+- 0,1,0 (RW)
+
+We won't use ARIMA(0,1,1) due to its' property of impulse vanishing after 1 period (day) leaving constant differences same 
+for all horizons of forecast which we assume to be not sufficient solution for long-term prediction.
+
+### VAR models
+

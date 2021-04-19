@@ -7,11 +7,11 @@ require(tidyverse)
 require(lubridate)
 require(forecast)
 
-calc_irf <- function(arima_model) {
+calc_irf <- function(arima_model, lag_max = 10) {
   ARMAtoMA(
     ar = arima_model$coef[arima_model$coef %>% names() %>% str_detect("^ar")],
     ma = arima_model$coef[arima_model$coef %>% names() %>% str_detect("^ma")],
-    lag.max = 10
+    lag.max = lag_max
   ) %>% `class<-`("irf")
 }
 
@@ -20,7 +20,7 @@ autoplot.irf <- function(irf) {
 
   tibble(lag = 1L:n, coef = as.numeric(irf)) %>%
     ggplot(aes(x = lag, y = coef)) +
-    geom_line() +
+    geom_line(color = "red") +
     geom_hline(yintercept = 0) +
     labs(x = "horizon", y = NULL, title = "IRF for ARIMA model") +
     theme(plot.title = element_text(hjust = 0.5)) +

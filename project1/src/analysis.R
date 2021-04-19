@@ -137,11 +137,9 @@ arima1 <- df$nl %>% auto.arima(
   ic = "aic"
 )
 
-# arima2 <- df$nl %>% Arima(order = c(1L, 1L, 1L), optim.method = "Nelder-Mead")
-
 sumup_arima(arima1) %>% kable(digits = 4)
 
-arima1 %>% calc_irf() %>% autoplot() + ggtitle("IRF for the ARIMA(1,1,0) model")
+arima1 %>% calc_irf(lag_max = 20) %>% autoplot() + ggtitle("IRF for the ARIMA(1,1,0) model")
 ggsave("project1/output/arima_irf.png")
 
 ## VAR models
