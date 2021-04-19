@@ -144,8 +144,26 @@ ggsave("project1/output/arima_irf.png")
 
 ## VAR models
 
-best_models <- df %>% select(-date) %>% zoo(., order.by = df$date) %>% VARselect()
-best_models %>% kable()
+df_train_var <- df %>% select(-date) %>% mutate_if(is.numeric, ~ diff(.x) %>% c(NA, .)) %>% na.omit()
+
+var_model_criteria <- df_train_var %>%
+  VARselect(lag.max = 15) %>%
+  pluck("criteria") %>%
+  t() %>%
+  as_tibble() %>%
+  rowid_to_column("p") %>%
+  rename_all(~ str_remove(.x, "\\(n\\)$"))
+
+var_model_criteria %>%
+  mutate(across(-p, ~ .x / .x[1])) %>%
+  pivot_longer(cols = -p, names_to = "model") %>%
+  ggplot(aes(x = p, y = value, color = model)) +
+  geom_line() +
+  scale_x_continuous(breaks = 1:15) +
+  labs(y = NULL, title = "VAR model information criteria for different p") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave("project1/output/var_ic_comp.png")
 
 freq_tab <- table(best_models$selection)
 p_best <- names(freq_tab)[which.max(freq_tab)] %>% as.integer()
