@@ -116,3 +116,5 @@ for all horizons of forecast which we assume to be not sufficient solution for l
 
 ### VAR models
 
+This sections needs to be further developed. Related code is finished, see [analysis.R](project1/src/analysis.R).
+
